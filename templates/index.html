@@ -8,6 +8,7 @@
         let audioContext;
         let mediaRecorder;
         let audioChunks = [];
+        let recordingDuration = 100; // Record for 0.1 seconds
 
         function startRecording() {
             audioChunks = [];
@@ -24,11 +25,18 @@
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     sendAudioToServer(audioBlob);
                 });
+
+                // Automatically stop recording after a set duration (e.g., 3 seconds)
+                setTimeout(() => {
+                    stopRecording();
+                }, recordingDuration);
             });
         }
 
         function stopRecording() {
-            mediaRecorder.stop();
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+            }
         }
 
         function sendAudioToServer(audioBlob) {
@@ -52,7 +60,6 @@
 <body>
     <h1>TUNA</h1>
     <button onclick="startRecording()">Start Recording</button>
-    <button onclick="stopRecording()">Stop Recording</button>
     <p id="feedback">Feedback: N/A</p>
     <p id="closest-note">Closest Note: N/A</p>
     <p id="cents-difference">Cents Difference: N/A</p>
