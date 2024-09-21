@@ -24,17 +24,23 @@ def process_audio():
     try:
         if 'audio_data' not in request.files:
             return jsonify({'error': 'No audio file provided'}), 400
-        
+
         # Read the audio data from the request
         audio_file = request.files['audio_data']
 
         # Convert audio file to WAV using pydub
         audio = AudioSegment.from_file(io.BytesIO(audio_file.read()), format='webm')  # or 'ogg'
+        
+        # Force resampling to 16 kHz for consistent processing
+        audio = audio.set_frame_rate(16000)  # Resample to 16 kHz
         wav_audio = io.BytesIO()
         audio.export(wav_audio, format='wav')
         wav_audio.seek(0)
+
+        # Read the resampled audio data with soundfile
         audio_data, samplerate = sf.read(wav_audio)
 
+        # Use the CREPE model to predict pitch
         time, frequency, confidence, activation = crepe.predict(audio_data, samplerate, viterbi=True)
         predicted_frequency = np.mean(frequency)
 
@@ -46,11 +52,10 @@ def process_audio():
             'closest_note': closest_note,
             'cents_difference': cents_difference
         })
-    
+
     except Exception as e:
         print(f"Error processing audio: {str(e)}")
         return jsonify({'error': 'Internal Server Error', 'message': str(e)}), 500
-
 
 # Function to find the closest note and give tuning feedback including cents
 def get_tuning_feedback(predicted_frequency):
