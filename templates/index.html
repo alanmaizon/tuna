@@ -2,66 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport tag added -->
     <title>TUNA</title>
-    <script>
-        let audioContext;
-        let mediaRecorder;
-        let audioChunks = [];
-        let recordingDuration = 100; // Record for 0.1 seconds
-
-        function startRecording() {
-            audioChunks = [];
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                audioContext = new AudioContext();
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
-                });
-
-                mediaRecorder.addEventListener("stop", () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    sendAudioToServer(audioBlob);
-                });
-
-                // Automatically stop recording after a set duration (e.g., 3 seconds)
-                setTimeout(() => {
-                    stopRecording();
-                }, recordingDuration);
-            });
-        }
-
-        function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-            }
-        }
-
-        function sendAudioToServer(audioBlob) {
-            const formData = new FormData();
-            formData.append('audio_data', audioBlob);
-
-            fetch('/process_audio', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('feedback').innerText = `Feedback: ${data.feedback}`;
-                document.getElementById('closest-note').innerText = `Closest Note: ${data.closest_note}`;
-                document.getElementById('cents-difference').innerText = `Cents Difference: ${data.cents_difference.toFixed(2)} cents`;
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <h1>TUNA</h1>
+    <div class="note-display" id="note-display">N/A</div>
+
+    <p class="feedback" id="feedback">Feedback: N/A</p>
+    <p class="feedback" id="closest-note">Closest Note: N/A</p>
+    <p class="feedback" id="cents-difference">Cents Difference: N/A</p>
+
+    <!-- Line of sharp/flat indicators -->
+    <div class="indicator-line">
+        <div class="cent-indicator" id="indicator-flat-5"></div>
+        <div class="cent-indicator" id="indicator-flat-4"></div>
+        <div class="cent-indicator" id="indicator-flat-3"></div>
+        <div class="cent-indicator" id="indicator-flat-2"></div>
+        <div class="cent-indicator" id="indicator-flat-1"></div>
+
+        <div class="cent-indicator" id="indicator-sharp-1"></div>
+        <div class="cent-indicator" id="indicator-sharp-2"></div>
+        <div class="cent-indicator" id="indicator-sharp-3"></div>
+        <div class="cent-indicator" id="indicator-sharp-4"></div>
+        <div class="cent-indicator" id="indicator-sharp-5"></div>
+    </div>
+
     <button onclick="startRecording()">Start Recording</button>
-    <p id="feedback">Feedback: N/A</p>
-    <p id="closest-note">Closest Note: N/A</p>
-    <p id="cents-difference">Cents Difference: N/A</p>
+
+    <!-- Link to external JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
