@@ -1,0 +1,59 @@
+/* src/App.css */
+.tuner-app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.tuner-display {
+  margin: 20px 0;
+}
+
+.note {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.frequency {
+  font-size: 24px;
+  color: #666;
+}
+
+.pitch-meter {
+  height: 4px;
+  background: #ddd;
+  margin: 20px 0;
+  position: relative;
+}
+
+.meter-indicator {
+  width: 10px;
+  height: 20px;
+  background: #007bff;
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.1s ease;
+}
+
+.control-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.control-button.active {
+  background: #dc3545;
+}
+
+.error {
+  color: #dc3545;
+  padding: 20px;
+  text-align: center;
+}
