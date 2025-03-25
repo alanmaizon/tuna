@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport tag added -->
-    <title>TUNA</title>
-    <!-- Link to external CSS file -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUNA – Digital Tuner</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <!-- PWA Metadata -->
+    <link rel="manifest" href="/static/manifest.json" />
+    <meta name="theme-color" content="#222222" />
+    <link rel="icon" sizes="192x192" href="/static/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/static/icons/icon-192.png" />
+
 </head>
 <body>
-    <h1>TUNA</h1>
-    <div class="note-display" id="note-display">N/A</div>
-
-    <p class="feedback" id="feedback">Feedback: N/A</p>
-    <p class="feedback" id="closest-note">Closest Note: N/A</p>
-    <p class="feedback" id="cents-difference">Cents Difference: N/A</p>
-
-    <!-- Line of sharp/flat indicators -->
-    <div class="indicator-line">
-        <div class="cent-indicator" id="indicator-flat-5"></div>
-        <div class="cent-indicator" id="indicator-flat-4"></div>
-        <div class="cent-indicator" id="indicator-flat-3"></div>
-        <div class="cent-indicator" id="indicator-flat-2"></div>
-        <div class="cent-indicator" id="indicator-flat-1"></div>
-
-        <div class="cent-indicator" id="indicator-sharp-1"></div>
-        <div class="cent-indicator" id="indicator-sharp-2"></div>
-        <div class="cent-indicator" id="indicator-sharp-3"></div>
-        <div class="cent-indicator" id="indicator-sharp-4"></div>
-        <div class="cent-indicator" id="indicator-sharp-5"></div>
-    </div>
+    <h1>🎵 TUNA – Digital Tuner</h1>
 
     <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
 
-    <!-- Link to external JavaScript file -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <div class="feedback">
+        <p id="feedback">Feedback: N/A</p>
+        <p id="note">Closest Note: N/A</p>
+        <p id="cents">Cents Difference: N/A</p>
+        <p id="frequency">Detected Frequency: N/A</p>
+    </div>
+
+    <!-- Load frontend logic -->
+    <script src="/static/js/tuner.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/static/service-worker.js')
+            .then(() => console.log("✅ Service Worker registered"))
+            .catch(err => console.log("❌ Service Worker failed", err));
+        }
+    </script>
 </body>
 </html>
