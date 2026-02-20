@@ -1,4 +1,4 @@
-# TUNA (Tuning Utility for Notes and Audio)
+# TUNA (Tuning Utility for Now and Always)
 
 TUNA is a real-time tuning application that helps users check their pitch accuracy against standard musical notes. It is available as a **legacy web app** (Flask/Python) and a **native iOS app** (SwiftUI).
 
@@ -104,3 +104,4 @@ A native SwiftUI application that performs real-time pitch detection on-device u
 ## Contributing
 
 Contributions are welcome! If you have suggestions or improvements, please open an issue or submit a pull request.
+
